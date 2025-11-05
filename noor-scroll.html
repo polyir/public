@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p1">&lt;html lang="fa" dir="rtl"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="utf-8" /&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1" /&gt;</p>
+<p class="p1">&lt;title&gt;Noor Scroll Motion&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>html,body{margin:0;padding:0;background:#000;height:100%;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>#noor-scroll{position:relative;}</p>
+<p dir="rtl" class="p1"><span class="Apple-converted-space">  </span>/* طول مسیر اسکرول را اینجا تنظیم کن */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.scroll-space{height:200vh;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sticky-wrap{position:sticky; top:0; height:100vh; overflow:hidden; background:#000;</p>
+<p class="p1"><span class="Apple-converted-space">               </span>display:flex; align-items:center; justify-content:center;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.sticky-wrap video{width:100%; height:100%; object-fit:cover; max-width:100%; max-height:100%;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.hint{position:absolute; bottom:10px; left:50%; transform:translateX(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color:#bbb; font:12px/1 system-ui, tahoma; opacity:.7}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;section id="noor-scroll"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="scroll-space"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sticky-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;video id="noorVideo"</p>
+<p class="p1"><span class="Apple-converted-space">             </span>src="https://assets.zyrosite.com/AoP4ao43OesWzGXd/noor-animo-2s5GW5L1hDt4MaVJ.mp4"</p>
+<p class="p1"><span class="Apple-converted-space">             </span>muted playsinline preload="none" poster=""</p>
+<p class="p1"><span class="Apple-converted-space">             </span>aria-label="Project Noor scroll-scrub video"&gt;&lt;/video&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="hint"&gt;اسکرول کن ▶︎&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">(function(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const video = document.getElementById('noorVideo');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const space = document.querySelector('#noor-scroll .scroll-space');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let dur = 0, ready = false, rafId = null;</p>
+<p class="p2"><br></p>
+<p dir="rtl" class="p1"><span class="Apple-converted-space">  </span>// فقط وقتی سکشن در دید است محاسبه کن (برای کاهش مصرف CPU)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const io = new IntersectionObserver(entries=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>entries.forEach(e=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(e.isIntersecting){ loop(); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>else { cancelAnimationFrame(rafId); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}, {threshold: 0});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>io.observe(space);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function primeVideo(){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// iOS اجازهٔ set currentTime بدون یک play/pause کوتاه نمی‌دهد</p>
+<p class="p1"><span class="Apple-converted-space">    </span>video.play().then(()=&gt; video.pause()).catch(()=&gt;{});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function onMeta(){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>dur = video.duration || 15;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ready = true;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>primeVideo();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>video.addEventListener('loadedmetadata', onMeta);</p>
+<p dir="rtl" class="p1"><span class="Apple-converted-space">  </span>// وقتی کاربر برای اولین بار اسکرول/لمس کرد فایل را لود کن</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const firstInteract = () =&gt; { video.load(); window.removeEventListener('scroll', firstInteract); document.removeEventListener('touchstart', firstInteract); };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('scroll', firstInteract, {once:true, passive:true});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.addEventListener('touchstart', firstInteract, {once:true});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function update(){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!ready) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rect = space.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const vh = window.innerHeight || document.documentElement.clientHeight;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const start = Math.max(0, -rect.top);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const total = Math.max(1, rect.height - vh);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const t = Math.min(1, Math.max(0, start / total)); // 0..1</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const target = t * dur;</p>
+<p dir="rtl" class="p1"><span class="Apple-converted-space">    </span>// نرم‌سازی حرکت برای جلوگیری از پرش فریم</p>
+<p class="p1"><span class="Apple-converted-space">    </span>video.currentTime += (target - video.currentTime) * 0.2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(!video.paused) video.pause(); // از پخش خودکار جلوگیری کن</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function loop(){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>update();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rafId = requestAnimationFrame(loop);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p dir="rtl" class="p1"><span class="Apple-converted-space">  </span>// به تغییر اندازه هم واکنش بده</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('resize', update, {passive:true});</p>
+<p class="p1">})();</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
